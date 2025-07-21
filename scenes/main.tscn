@@ -1,0 +1,101 @@
+[gd_scene load_steps=14 format=3 uid="uid://iyj8wndhendr"]
+
+[ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="1_o5qli"]
+[ext_resource type="PackedScene" uid="uid://dhwn654mhj0kj" path="res://entities/boy/boy.tscn" id="2_0wfyh"]
+[ext_resource type="Script" uid="uid://csjccrhj5wnx7" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_3d.gd" id="3_jyhfs"]
+[ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="4_tbgi4"]
+[ext_resource type="Script" uid="uid://b8hhnqsugykly" path="res://addons/phantom_camera/scripts/resources/camera_3d_resource.gd" id="5_tbgi4"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sgp6g"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_o5qli"]
+sky_material = SubResource("ProceduralSkyMaterial_sgp6g")
+
+[sub_resource type="Environment" id="Environment_0wfyh"]
+background_mode = 2
+sky = SubResource("Sky_o5qli")
+tonemap_mode = 2
+
+[sub_resource type="Resource" id="Resource_tefeu"]
+script = ExtResource("4_tbgi4")
+duration = 0.2
+transition = 2
+ease = 2
+
+[sub_resource type="Resource" id="Resource_o6xl0"]
+script = ExtResource("5_tbgi4")
+keep_aspect = 1
+cull_mask = 1048575
+h_offset = 0.0
+v_offset = 0.0
+projection = 1
+fov = 75.0
+size = 2.0
+frustum_offset = Vector2(0, 0)
+near = 0.05
+far = 4000.0
+metadata/_custom_type_script = "uid://b8hhnqsugykly"
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sugp2"]
+albedo_color = Color(0.273873, 0.273873, 0.273873, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jyhfs"]
+material = SubResource("StandardMaterial3D_sugp2")
+size = Vector2(200, 200)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o5qli"]
+size = Vector3(198.874, 0.510986, 199.895)
+
+[node name="Main" type="Node"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_0wfyh")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+physics_interpolation_mode = 1
+transform = Transform3D(1, 0, 0, 0, 0.999857, 0.016894, 0, -0.016894, 0.999857, 0, 0.847736, 1.3)
+projection = 1
+size = 2.0
+
+[node name="PhantomCameraHost" type="Node" parent="Camera3D"]
+process_priority = 300
+process_physics_priority = 300
+script = ExtResource("1_o5qli")
+metadata/_custom_type_script = "uid://bd046eokvcnu2"
+
+[node name="Player" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.607736, 0)
+
+[node name="Boy" parent="Player" instance=ExtResource("2_0wfyh")]
+
+[node name="PhantomCamera3D" type="Node3D" parent="Player" node_paths=PackedStringArray("follow_target")]
+transform = Transform3D(1, 0, 0, 0, 0.999857, 0.016894, 0, -0.016894, 0.999857, 0, 0.847736, 1.3)
+top_level = true
+script = ExtResource("3_jyhfs")
+follow_mode = 2
+follow_target = NodePath("../Boy")
+tween_resource = SubResource("Resource_tefeu")
+camera_3d_resource = SubResource("Resource_o6xl0")
+follow_offset = Vector3(0, 0.24, 1.3)
+metadata/_custom_type_script = "uid://csjccrhj5wnx7"
+
+[node name="Level" type="Node3D" parent="."]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Level"]
+collision_layer = 4
+collision_mask = 3
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Level/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0254383, 0.0971289, -0.046567)
+mesh = SubResource("PlaneMesh_jyhfs")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Level/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0254383, -0.147378, -0.046567)
+shape = SubResource("BoxShape3D_o5qli")

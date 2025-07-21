@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ConditionResource" load_steps=2 format=3 uid="uid://ccsx1bnyhmrem"]
+
+[ext_resource type="Script" uid="uid://cn8ptm2rqecce" path="res://scripts/conditions/condition_resource.gd" id="1_5mlq2"]
+
+[resource]
+script = ExtResource("1_5mlq2")
+conditions_mask = 0
+condition_ruleset = Array[Dictionary]([])
+metadata/_custom_type_script = "uid://cn8ptm2rqecce"

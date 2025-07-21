@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=3 uid="uid://fkqpt5w4tjhq"]
+
+[ext_resource type="Script" uid="uid://dyts13fp2xveu" path="res://char_state_machine/state_machine/state_machine.gd" id="1_8iolt"]
+[ext_resource type="Script" uid="uid://btxraun0k7824" path="res://char_state_machine/states/idle_state.gd" id="2_u56lj"]
+[ext_resource type="Script" uid="uid://k1l23fbcauy" path="res://char_state_machine/states/jumping_state.gd" id="4_ek3x6"]
+[ext_resource type="Script" uid="uid://dy1pb08bw0xcl" path="res://char_state_machine/states/walking_state.gd" id="5_fel51"]
+
+[node name="StateMachine" type="Node"]
+script = ExtResource("1_8iolt")
+state_scripts = Dictionary[int, GDScript]({
+1: ExtResource("2_u56lj"),
+2: ExtResource("5_fel51"),
+3: ExtResource("4_ek3x6")
+})
